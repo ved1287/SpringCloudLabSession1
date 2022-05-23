@@ -1,0 +1,27 @@
+server:
+  port: 9000
+  
+spring:
+  cloud:
+    gateway:
+      routes:
+        #Route Mapping
+      - id: ManagerMicroservices               #RouteIdentifier
+        uri: http://localhost:9053/         #Respective microservice URL which needs to be mapped
+         #Request Context Path Mapping
+        predicates:
+        - Path=/Manger/**          
+      
+        #Route Mapping - With out Filters - Version 2 Request
+      - id: AdminMicroservices
+        uri: http://localhost:9052/
+        predicates:
+        - Path=/Admin/**
+
+        #Route Mapping - With Filters - Version 1 Request
+      - id: EmployeeMicroservices
+        uri: http://localhost:9051/
+        predicates:
+        - Path=/Employee/** 
+        filters:
+        - RewritePath=/Employee, /Admin/      #Rewriting the path 
